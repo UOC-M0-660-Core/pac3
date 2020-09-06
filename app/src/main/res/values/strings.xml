@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">PAC3</string>
+    <string name="twitch_login_button">Login with Twitch</string>
+    <string name="activity_login_title">Login</string>
+    <string name="activity_oauth_title">Login with Twitch</string>
+    <string name="activity_streams_title">Streams</string>
+</resources>
