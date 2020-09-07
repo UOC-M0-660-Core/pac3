@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import edu.uoc.pac3.oauth.LoginActivity
 import edu.uoc.pac3.oauth.SessionManager
-import edu.uoc.pac3.twitch.StreamsActivity
+import edu.uoc.pac3.twitch.streams.StreamsActivity
 
 class LaunchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,5 +22,6 @@ class LaunchActivity : AppCompatActivity() {
             // User not available, request Login
             startActivity(Intent(this, LoginActivity::class.java))
         }
+        finish()
     }
 }

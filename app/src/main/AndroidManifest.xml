@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.uoc.pac3">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="false"
         android:fullBackupContent="false"
@@ -10,7 +11,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".twitch.ProfileActivity"></activity>
         <activity android:name=".LaunchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,8 +26,12 @@
             android:label="@string/activity_oauth_title"
             android:parentActivityName=".oauth.LoginActivity" />
         <activity
-            android:name=".twitch.StreamsActivity"
+            android:name=".twitch.streams.StreamsActivity"
             android:label="@string/activity_streams_title" />
+        <activity
+            android:name=".twitch.profile.ProfileActivity"
+            android:label="@string/activity_profile_title"
+            android:parentActivityName=".twitch.streams.StreamsActivity" />
     </application>
 
 </manifest>
