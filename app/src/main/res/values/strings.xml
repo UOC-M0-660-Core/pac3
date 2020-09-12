@@ -10,6 +10,7 @@
 
     <string name="hint_user_description">Description</string>
     <string name="button_save_description">Update Description</string>
+    <string name="button_logout">Log out</string>
 
     <plurals name="viewers_text">
         <item quantity="one">%d viewer</item>

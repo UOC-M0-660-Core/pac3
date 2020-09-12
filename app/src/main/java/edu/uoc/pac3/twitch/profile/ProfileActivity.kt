@@ -1,5 +1,6 @@
 package edu.uoc.pac3.twitch.profile
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -13,6 +14,8 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import edu.uoc.pac3.R
 import edu.uoc.pac3.network.Endpoints
 import edu.uoc.pac3.network.Network
+import edu.uoc.pac3.oauth.LoginActivity
+import edu.uoc.pac3.oauth.SessionManager
 import io.ktor.client.request.*
 import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.coroutines.launch
@@ -28,12 +31,17 @@ class ProfileActivity : AppCompatActivity() {
         lifecycleScope.launch {
             getUserProfile()
         }
-        // Update Description Listener
+        // Update Description Button Listener
         updateDescriptionButton.setOnClickListener {
             // Update User Description
             lifecycleScope.launch {
                 updateUserDescription(userDescriptionEditText.text?.toString() ?: "")
             }
+        }
+        // Logout Button Listener
+        logoutButton.setOnClickListener {
+            // Logout
+            logout()
         }
     }
 
@@ -90,6 +98,14 @@ class ProfileActivity : AppCompatActivity() {
         }
         // Views
         viewsText.text = getString(R.string.views_text, user.viewCount)
+    }
+
+    private fun logout() {
+        SessionManager(this).clearAccessToken()
+        SessionManager(this).clearRefreshToken()
+        // Open Login
+        startActivity(Intent(this, LoginActivity::class.java))
+        finish()
     }
 
     private fun showError(text: String) {

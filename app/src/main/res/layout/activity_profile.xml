@@ -70,6 +70,14 @@
             android:layout_marginTop="@dimen/margin_medium"
             android:text="@string/button_save_description" />
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/logoutButton"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:text="@string/button_logout" />
+
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
