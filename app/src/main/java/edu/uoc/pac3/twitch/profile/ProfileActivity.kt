@@ -1,30 +1,32 @@
 package edu.uoc.pac3.twitch.profile
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import edu.uoc.pac3.R
-import edu.uoc.pac3.data.network.Endpoints
 import edu.uoc.pac3.data.network.Network
 import edu.uoc.pac3.oauth.LoginActivity
 import edu.uoc.pac3.data.SessionManager
+import edu.uoc.pac3.data.TwitchApiService
+import edu.uoc.pac3.data.oauth.UnauthorizedException
 import edu.uoc.pac3.data.user.User
-import edu.uoc.pac3.data.user.UsersResponse
-import io.ktor.client.request.*
 import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.coroutines.launch
 
 class ProfileActivity : AppCompatActivity() {
 
     private val TAG = "ProfileActivity"
+
+    private val twitchApiService = TwitchApiService(Network.createHttpClient(this))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +37,9 @@ class ProfileActivity : AppCompatActivity() {
         }
         // Update Description Button Listener
         updateDescriptionButton.setOnClickListener {
+            // Hide Keyboard
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            imm?.hideSoftInputFromWindow(it.windowToken, 0)
             // Update User Description
             lifecycleScope.launch {
                 updateUserDescription(userDescriptionEditText.text?.toString() ?: "")
@@ -51,18 +56,19 @@ class ProfileActivity : AppCompatActivity() {
         progressBar.visibility = VISIBLE
         // Retrieve the Twitch User Profile using the API
         try {
-            val response = Network.createHttpClient(this)
-                .get<UsersResponse>(Endpoints.usersUrl)
-
-            response.data?.firstOrNull()?.let { user ->
+            twitchApiService.getUser()?.let { user ->
+                // Success :)
                 // Update the UI with the user data
                 setUserInfo(user)
+            } ?: run {
+                // Error :(
+                showError(getString(R.string.error_profile))
             }
-        } catch (t: Throwable) {
-            Log.w(TAG, "Error getting user profile", t)
-            showError(getString(R.string.error_profile))
+            // Hide Loading
+            progressBar.visibility = GONE
+        } catch (t: UnauthorizedException) {
+            onUnauthorized()
         }
-        progressBar.visibility = GONE
     }
 
 
@@ -70,20 +76,19 @@ class ProfileActivity : AppCompatActivity() {
         progressBar.visibility = VISIBLE
         // Update the Twitch User Description using the API
         try {
-            val response = Network.createHttpClient(this)
-                .put<UsersResponse>(Endpoints.usersUrl) {
-                    parameter("description", description)
-                }
-            // Refresh
-            response.data?.firstOrNull()?.let { user ->
+            twitchApiService.updateUserDescription(description)?.let { user ->
+                // Success :)
+                // Update the UI with the user data
                 setUserInfo(user)
+            } ?: run {
+                // Error :(
+                showError(getString(R.string.error_profile))
             }
-        } catch (t: Throwable) {
-            Log.w(TAG, "Error updating user description", t)
-            showError(getString(R.string.error_profile_update))
+            // Hide Loading
+            progressBar.visibility = GONE
+        } catch (t: UnauthorizedException) {
+            onUnauthorized()
         }
-
-        progressBar.visibility = GONE
     }
 
     private fun setUserInfo(user: User) {
@@ -103,11 +108,21 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun logout() {
+        // Clear local session data
         SessionManager(this).clearAccessToken()
         SessionManager(this).clearRefreshToken()
+        // Close this and all parent activities
+        finishAffinity()
         // Open Login
         startActivity(Intent(this, LoginActivity::class.java))
-        finish()
+    }
+
+    private fun onUnauthorized() {
+        // Clear local access token
+        SessionManager(this).clearAccessToken()
+        // User was logged out, close screen and all parent screens and open login
+        finishAffinity()
+        startActivity(Intent(this, LoginActivity::class.java))
     }
 
     private fun showError(text: String) {
