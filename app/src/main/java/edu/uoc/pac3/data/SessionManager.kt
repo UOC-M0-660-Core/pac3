@@ -1,4 +1,4 @@
-package edu.uoc.pac3.oauth
+package edu.uoc.pac3.data
 
 import android.content.Context
 
@@ -6,11 +6,11 @@ import android.content.Context
  * Created by alex on 06/09/2020.
  */
 
-class SessionManager(private val context: Context) {
+class SessionManager(context: Context) {
 
     private val sharedPreferencesName = "sessionPreferences"
     private val sharedPreferences =
-        context.getSharedPreferences("sharedPreferencesName", Context.MODE_PRIVATE)
+        context.getSharedPreferences(sharedPreferencesName, Context.MODE_PRIVATE)
 
     private val accessTokenKey = "accessTokeKey"
     private val refreshTokenKey = "refreshTokenKey"

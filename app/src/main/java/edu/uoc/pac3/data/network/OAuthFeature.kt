@@ -1,4 +1,4 @@
-package edu.uoc.pac3.oauth
+package edu.uoc.pac3.data.network
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.HttpClientCall

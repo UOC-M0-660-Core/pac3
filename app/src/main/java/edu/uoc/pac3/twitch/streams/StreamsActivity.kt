@@ -10,8 +10,8 @@ import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import edu.uoc.pac3.R
-import edu.uoc.pac3.network.Endpoints
-import edu.uoc.pac3.network.Network
+import edu.uoc.pac3.data.network.Endpoints
+import edu.uoc.pac3.data.network.Network
 import edu.uoc.pac3.oauth.LoginActivity
 import edu.uoc.pac3.twitch.profile.ProfileActivity
 import io.ktor.client.features.*

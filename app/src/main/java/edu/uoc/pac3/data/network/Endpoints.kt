@@ -1,4 +1,4 @@
-package edu.uoc.pac3.network
+package edu.uoc.pac3.data.network
 
 /**
  * Created by alex on 07/09/2020.

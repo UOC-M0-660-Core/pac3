@@ -1,11 +1,10 @@
-package edu.uoc.pac3.network
+package edu.uoc.pac3.data.network
 
 import android.content.Context
 import android.util.Log
-import edu.uoc.pac3.oauth.OAuthAccessTokenResponse
-import edu.uoc.pac3.oauth.OAuthConstants
-import edu.uoc.pac3.oauth.OAuthFeature
-import edu.uoc.pac3.oauth.SessionManager
+import edu.uoc.pac3.data.oauth.OAuthTokensResponse
+import edu.uoc.pac3.data.oauth.OAuthConstants
+import edu.uoc.pac3.data.SessionManager
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.features.*
@@ -84,7 +83,7 @@ object Network {
             try {
                 // Launch Refresh Request
                 val response =
-                    createHttpClient(context).post<OAuthAccessTokenResponse>(Endpoints.tokenUrl) {
+                    createHttpClient(context).post<OAuthTokensResponse>(Endpoints.tokenUrl) {
                         parameter("client_id", OAuthConstants.clientID)
                         parameter("client_secret", OAuthConstants.clientSecret)
                         parameter("refresh_token", refreshToken)

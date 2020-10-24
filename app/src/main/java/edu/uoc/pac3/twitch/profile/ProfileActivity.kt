@@ -12,10 +12,10 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import edu.uoc.pac3.R
-import edu.uoc.pac3.network.Endpoints
-import edu.uoc.pac3.network.Network
+import edu.uoc.pac3.data.network.Endpoints
+import edu.uoc.pac3.data.network.Network
 import edu.uoc.pac3.oauth.LoginActivity
-import edu.uoc.pac3.oauth.SessionManager
+import edu.uoc.pac3.data.SessionManager
 import io.ktor.client.request.*
 import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.coroutines.launch

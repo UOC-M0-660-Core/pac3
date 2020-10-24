@@ -1,4 +1,4 @@
-package edu.uoc.pac3.oauth
+package edu.uoc.pac3.data.oauth
 
 import java.util.*
 

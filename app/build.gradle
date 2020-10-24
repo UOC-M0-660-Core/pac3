@@ -46,7 +46,7 @@ dependencies {
     implementation "io.ktor:ktor-client-serialization-jvm:$ktorVersion"
     implementation "io.ktor:ktor-client-logging-jvm:$ktorVersion"
     // Kotlinx Serialization: Http Response <> Model
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-core:$kotlinxSerializationVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion"
     // Coroutines: Multi-threading solution
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersioon"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersioon"
