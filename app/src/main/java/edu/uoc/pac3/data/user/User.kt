@@ -1,7 +1,5 @@
-package edu.uoc.pac3.twitch.profile
+package edu.uoc.pac3.data.user
 
-import edu.uoc.pac3.twitch.streams.Pagination
-import edu.uoc.pac3.twitch.streams.Stream
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

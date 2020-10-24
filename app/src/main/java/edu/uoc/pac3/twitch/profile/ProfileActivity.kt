@@ -16,6 +16,8 @@ import edu.uoc.pac3.data.network.Endpoints
 import edu.uoc.pac3.data.network.Network
 import edu.uoc.pac3.oauth.LoginActivity
 import edu.uoc.pac3.data.SessionManager
+import edu.uoc.pac3.data.user.User
+import edu.uoc.pac3.data.user.UsersResponse
 import io.ktor.client.request.*
 import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.coroutines.launch
