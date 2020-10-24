@@ -13,8 +13,8 @@
     <string name="button_logout">Log out</string>
 
     <plurals name="viewers_text">
-        <item quantity="one">%d viewer</item>
-        <item quantity="other">%d viewers</item>
+        <item quantity="one">%s viewer</item>
+        <item quantity="other">%s viewers</item>
     </plurals>
     <string name="views_text">%d views</string>
 

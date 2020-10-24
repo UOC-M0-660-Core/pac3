@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import edu.uoc.pac3.R
 import edu.uoc.pac3.data.streams.Stream
 import kotlinx.android.synthetic.main.item_stream.view.*
+import java.text.NumberFormat
 
 /**
  * Created by alex on 07/09/2020.
@@ -46,8 +47,9 @@ class StreamsAdapter : ListAdapter<Stream, StreamsAdapter.StreamViewHolder>(stre
                         .into(itemView.imageView)
                 }
             // Set Stream Views
+            val formattedViews = NumberFormat.getInstance().format(stream.viewerCount)
             itemView.viewsText.text = itemView.context.resources
-                .getQuantityString(R.plurals.viewers_text, stream.viewerCount, stream.viewerCount)
+                .getQuantityString(R.plurals.viewers_text, stream.viewerCount, formattedViews)
         }
     }
 
