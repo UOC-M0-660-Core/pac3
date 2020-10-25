@@ -1,11 +1,10 @@
 package edu.uoc.pac3
 
 import android.net.Uri
-import androidx.test.ext.junit.rules.ActivityScenarioRule
+import androidx.test.core.app.ActivityScenario
 import androidx.test.filters.LargeTest
 import edu.uoc.pac3.oauth.OAuthActivity
 import kotlinx.coroutines.runBlocking
-import org.junit.Rule
 import org.junit.Test
 
 /**
@@ -15,23 +14,23 @@ import org.junit.Test
 @LargeTest
 class Ex1Test {
 
-    @get:Rule
-    val activityRule = ActivityScenarioRule(OAuthActivity::class.java)
-
     @Test
     fun createsOauthUri() {
-        activityRule.scenario.onActivity {
+        val scenario = ActivityScenario.launch(OAuthActivity::class.java)
+        scenario.onActivity {
             val uri = it.buildOAuthUri()
             assert(uri != Uri.EMPTY)
             assert(uri.getQueryParameter("response_type") == "code") {
                 "OAuth Flow must be Authorization Code"
             }
         }
+        scenario.close()
     }
 
     @Test
     fun invalidAuthCodeReturnsNullTokens() {
-        activityRule.scenario.onActivity {
+        val scenario = ActivityScenario.launch(OAuthActivity::class.java)
+        scenario.onActivity {
             runBlocking {
                 val apiService = TestData.provideTwitchService(it)
                 val response = apiService.getTokens("12345")
@@ -40,5 +39,6 @@ class Ex1Test {
                 }
             }
         }
+        scenario.close()
     }
 }

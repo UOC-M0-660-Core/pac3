@@ -1,18 +1,17 @@
 package edu.uoc.pac3
 
+import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import edu.uoc.pac3.data.SessionManager
 import edu.uoc.pac3.twitch.profile.ProfileActivity
 import kotlinx.coroutines.runBlocking
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -24,9 +23,6 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 @LargeTest
 class Ex5Test : TwitchTest() {
-
-    @get:Rule
-    val activityRule = ActivityScenarioRule(ProfileActivity::class.java)
 
     @Test
     fun retrievesUserProfile() {
@@ -43,9 +39,13 @@ class Ex5Test : TwitchTest() {
 
     @Test
     fun displaysUserProfile() {
+        val scenario = ActivityScenario.launch(ProfileActivity::class.java)
+
         Thread.sleep(TestData.networkWaitingMillis)
         Espresso.onView(withText(TestData.userName)).check(matches(isDisplayed()))
         Espresso.onView(withText(TestData.userDescription)).check(matches(isDisplayed()))
+
+        scenario.close()
     }
 
     @Test
@@ -62,7 +62,8 @@ class Ex5Test : TwitchTest() {
 
     @Test
     fun removesAccessTokenOnLogout() {
-        activityRule.scenario.onActivity { }
+        val scenario = ActivityScenario.launch(ProfileActivity::class.java)
+
         // Click logout
         try {
             Espresso.onView(withId(R.id.logoutButton)).perform(click())
@@ -83,6 +84,8 @@ class Ex5Test : TwitchTest() {
         runBlocking {
             TestData.setAccessToken(ApplicationProvider.getApplicationContext())
         }
+
+        scenario.close()
     }
 
 }

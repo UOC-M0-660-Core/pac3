@@ -1,15 +1,14 @@
 package edu.uoc.pac3
 
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import edu.uoc.pac3.twitch.streams.StreamsActivity
 import kotlinx.coroutines.runBlocking
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -22,11 +21,8 @@ import org.junit.runner.RunWith
 @LargeTest
 class Ex4Test : TwitchTest() {
 
-    @get:Rule
-    val activityRule = ActivityScenarioRule(StreamsActivity::class.java)
-
     @Test
-    fun retrievesNextListOfStreams() {
+    fun retrievesNextPageOfStreams() {
         runBlocking {
             val firstStreams = twitchService.getStreams()
             val cursor = firstStreams?.pagination?.cursor
@@ -42,11 +38,14 @@ class Ex4Test : TwitchTest() {
 
     @Test
     fun recyclerViewBottomScrollLoadsMoreStreams() {
+        // Start Activity
+        val scenario = ActivityScenario.launch(StreamsActivity::class.java)
+
         var previousItemCount = 0
         var recyclerView: RecyclerView? = null
         // Wait to load
         Thread.sleep(TestData.networkWaitingMillis)
-        activityRule.scenario.onActivity {
+        scenario.onActivity {
             recyclerView = it.findViewById<RecyclerView>(R.id.recyclerView)
             assert(recyclerView != null && recyclerView!!.adapter != null) {
                 "Recyclerview and Adapter cannot be null"
@@ -68,6 +67,9 @@ class Ex4Test : TwitchTest() {
         assert(currentItemCount > previousItemCount) {
             "More items were not added: Previous $previousItemCount -> Current: $currentItemCount"
         }
+
+        // End Activity
+        scenario.close()
     }
 
 }
