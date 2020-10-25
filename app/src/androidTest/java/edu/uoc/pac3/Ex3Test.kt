@@ -1,6 +1,7 @@
 package edu.uoc.pac3
 
 import android.content.Context
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
@@ -32,7 +33,8 @@ class Ex3Test : TwitchTest() {
     val activityRule = ActivityScenarioRule(StreamsActivity::class.java)
 
     @Test
-    fun getsNewAccessToken(context: Context) {
+    fun getsNewAccessToken() {
+        val context: Context = ApplicationProvider.getApplicationContext()
         runBlocking {
             val response =
                 TestData.provideHttpClient(context).post<OAuthTokensResponse>(Endpoints.tokenUrl) {
