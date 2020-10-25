@@ -19,7 +19,7 @@ object TestData {
     const val sharedPrefsWaitingMillis = 500L
 
     // Network
-    private fun provideHttpClient(context: Context): HttpClient = Network.createHttpClient(context)
+    fun provideHttpClient(context: Context): HttpClient = Network.createHttpClient(context)
     fun provideTwitchService(context: Context): TwitchApiService =
         TwitchApiService(provideHttpClient(context))
 
