@@ -18,7 +18,7 @@
             android:id="@+id/imageView"
             android:layout_width="@dimen/profile_image_size"
             android:layout_height="@dimen/profile_image_size"
-            tools:src="@color/black" />
+            tools:src="@mipmap/ic_launcher" />
 
         <LinearLayout
             android:id="@+id/viewsContainer"

@@ -36,7 +36,7 @@ object TestData {
     // Token Refresh
     suspend fun setAccessToken(context: Context) {
         val response =
-            provideHttpClient(context).post<OAuthTokensResponse>(Endpoints.tokenUrl) {
+            provideHttpClient(context).post<OAuthTokensResponse>("https://id.twitch.tv/oauth2/token") {
                 parameter("client_id", "efwo35z4mgyiyhje8bbp73b98oyavf")
                 parameter("client_secret", "7fl44yqjm5tjdx73z45dd9ybwuuiez")
                 parameter("refresh_token", refreshToken)

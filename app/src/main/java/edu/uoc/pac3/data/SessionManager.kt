@@ -8,47 +8,34 @@ import android.content.Context
 
 class SessionManager(context: Context) {
 
-    private val sharedPreferencesName = "sessionPreferences"
-    private val sharedPreferences =
-        context.getSharedPreferences(sharedPreferencesName, Context.MODE_PRIVATE)
-
-    private val accessTokenKey = "accessTokeKey"
-    private val refreshTokenKey = "refreshTokenKey"
-
     fun isUserAvailable(): Boolean {
-        return getAccessToken() != null
+        // TODO: Implement
+        return false
     }
 
     fun getAccessToken(): String? {
-        return sharedPreferences.getString(accessTokenKey, null)
+        // TODO: Implement
+        return null
     }
 
     fun saveAccessToken(accessToken: String) {
-        val editor = sharedPreferences.edit()
-        editor.putString(accessTokenKey, accessToken)
-        editor.apply()
+        TODO("Save Access Token")
     }
 
     fun clearAccessToken() {
-        val editor = sharedPreferences.edit()
-        editor.remove(accessTokenKey)
-        editor.apply()
+        TODO("Clear Access Token")
     }
 
     fun getRefreshToken(): String? {
-        return sharedPreferences.getString(refreshTokenKey, null)
+        TODO("Get Refresh Token")
     }
 
     fun saveRefreshToken(refreshToken: String) {
-        val editor = sharedPreferences.edit()
-        editor.putString(refreshTokenKey, refreshToken)
-        editor.apply()
+        TODO("Save Refresh Token")
     }
 
     fun clearRefreshToken() {
-        val editor = sharedPreferences.edit()
-        editor.remove(refreshTokenKey)
-        editor.apply()
+        TODO("Clear Refresh Token")
     }
 
 }
