@@ -4,7 +4,7 @@
 
 #### Explica el ciclo de vida de una Activity.
 
-##### Por qué vinculamos las tareas de red a los componentes de la aplicación?
+##### ¿Por qué vinculamos las tareas de red a los componentes UI de la aplicación?
 Escribe tu respuesta aquí
 
 ##### ¿Qué pasaría si intentamos actualizar la recyclerview con nuevos streams después de que el usuario haya cerrado la aplicación?
@@ -14,6 +14,7 @@ Escribe tu respuesta aquí
 Escribe aquí tu respuesta
 
 ---
+
 #### Paginación 
 
 #### Explica el uso de paginación en la API de Twitch.
