@@ -15,7 +15,7 @@ Escribe aquí tu respuesta
 
 ---
 
-#### Paginación 
+### Paginación 
 
 #### Explica el uso de paginación en la API de Twitch.
 
