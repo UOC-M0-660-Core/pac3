@@ -63,6 +63,8 @@ class OAuthActivity : AppCompatActivity() {
                                 // Got it!
                                 Log.d("OAuth", "Here is the authorization code! $code")
                                 onAuthorizationCodeRetrieved(code)
+                                // Hide WebView
+                                webView.visibility = View.GONE
                             } ?: run {
                                 // User cancelled the login flow
                                 // Handle error
