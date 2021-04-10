@@ -3,7 +3,6 @@ package edu.uoc.pac3
 import android.content.Context
 import edu.uoc.pac3.data.SessionManager
 import edu.uoc.pac3.data.TwitchApiService
-import edu.uoc.pac3.data.network.Endpoints
 import edu.uoc.pac3.data.network.Network
 import edu.uoc.pac3.data.oauth.OAuthTokensResponse
 import io.ktor.client.*
@@ -19,7 +18,9 @@ object TestData {
     const val sharedPrefsWaitingMillis = 500L
 
     // Network
-    fun provideHttpClient(context: Context): HttpClient = Network.createHttpClient(context)
+    private fun provideHttpClient(context: Context): HttpClient =
+        Network.createHttpClient(context, clientId, clientSecret)
+
     fun provideTwitchService(context: Context): TwitchApiService =
         TwitchApiService(provideHttpClient(context))
 
@@ -27,6 +28,8 @@ object TestData {
     const val dummyAccessToken = "access_12345"
     const val dummyRefreshToken = "refresh_12345"
     const val refreshToken = "fzscymlbf7ox4mj9yg650ji47mlwd6d8t3b8y4iw30uxq3f2ti"
+    private const val clientId = "efwo35z4mgyiyhje8bbp73b98oyavf"
+    private const val clientSecret = "7fl44yqjm5tjdx73z45dd9ybwuuiez"
 
     // User
     const val userName = "Alqueraf"
@@ -37,8 +40,8 @@ object TestData {
     suspend fun setAccessToken(context: Context) {
         val response =
             provideHttpClient(context).post<OAuthTokensResponse>("https://id.twitch.tv/oauth2/token") {
-                parameter("client_id", "efwo35z4mgyiyhje8bbp73b98oyavf")
-                parameter("client_secret", "7fl44yqjm5tjdx73z45dd9ybwuuiez")
+                parameter("client_id", clientId)
+                parameter("client_secret", clientSecret)
                 parameter("refresh_token", refreshToken)
                 parameter("grant_type", "refresh_token")
             }

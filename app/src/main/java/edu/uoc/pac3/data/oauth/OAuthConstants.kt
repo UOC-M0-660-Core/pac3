@@ -5,6 +5,8 @@ package edu.uoc.pac3.data.oauth
  */
 object OAuthConstants {
 
-    // TODO: Set OAuth2 Variables
+    // TODO: Declare your OAuth2 Values here
+    const val clientId = "test123"
+    const val clientSecret = "test123"
 
 }

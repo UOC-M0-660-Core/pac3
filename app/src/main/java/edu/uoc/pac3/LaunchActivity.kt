@@ -7,6 +7,9 @@ import edu.uoc.pac3.oauth.LoginActivity
 import edu.uoc.pac3.data.SessionManager
 import edu.uoc.pac3.twitch.streams.StreamsActivity
 
+// This is the launcher Activity as declared in the AndroidManifest
+// It helps with deciding where to redirect the user (Login or Streams)
+// This class does not need any changes
 class LaunchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

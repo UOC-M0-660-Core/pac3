@@ -25,17 +25,17 @@ class Ex6Test {
         val sessionManager = SessionManager(ApplicationProvider.getApplicationContext())
         // Save valid refreshToken
         sessionManager.saveRefreshToken(TestData.refreshToken)
-        // Save invalid acceessToken
+        // Save invalid accessToken
         sessionManager.saveAccessToken(TestData.dummyAccessToken)
         Thread.sleep(TestData.sharedPrefsWaitingMillis)
         // Test Streams Request
         runBlocking {
             val streams = twitchService.getStreams()
-            assert(streams != null) {
-                "Token should be auto-refreshed and streams retrieved correctly"
-            }
             assert(sessionManager.getAccessToken() != TestData.dummyAccessToken) {
                 "New access token should be saved"
+            }
+            assert(streams != null) {
+                "Streams should be retrieved correctly with the new access token"
             }
         }
     }
