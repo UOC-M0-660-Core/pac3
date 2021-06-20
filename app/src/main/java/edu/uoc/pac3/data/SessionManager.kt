@@ -1,6 +1,7 @@
 package edu.uoc.pac3.data
 
 import android.content.Context
+import android.util.Log
 
 /**
  * Created by alex on 06/09/2020.
@@ -8,6 +9,8 @@ import android.content.Context
  */
 
 class SessionManager(context: Context) {
+
+    private val TAG = "SessionManager"
 
     // TODO: Access SharedPreferences or EncryptedSharedPreferences
 
@@ -23,10 +26,12 @@ class SessionManager(context: Context) {
 
     fun saveAccessToken(accessToken: String) {
         // TODO("Save Access Token")
+        Log.i(TAG, "Access Token saved: $accessToken")
     }
 
     fun clearAccessToken() {
         // TODO("Clear Access Token")
+        Log.i(TAG, "Access token cleared")
     }
 
     fun getRefreshToken(): String? {
@@ -36,10 +41,12 @@ class SessionManager(context: Context) {
 
     fun saveRefreshToken(refreshToken: String) {
         // TODO("Save Refresh Token")
+        Log.i(TAG, "Refresh Token saved: $refreshToken")
     }
 
     fun clearRefreshToken() {
         // TODO("Clear Refresh Token")
+        Log.i(TAG, "Refresh token cleared")
     }
 
 }

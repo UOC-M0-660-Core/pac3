@@ -1,13 +1,16 @@
 package edu.uoc.pac3
 
-import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ActivityScenario
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
-import androidx.test.espresso.contrib.RecyclerViewActions
-import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.NoMatchingViewException
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import edu.uoc.pac3.twitch.streams.StreamsActivity
+import edu.uoc.pac3.data.SessionManager
+import edu.uoc.pac3.twitch.profile.ProfileActivity
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -22,53 +25,68 @@ import org.junit.runner.RunWith
 class Ex4Test : TwitchTest() {
 
     @Test
-    fun retrievesNextPageOfStreams() {
+    fun retrievesUserProfile() {
         runBlocking {
-            val firstStreams = twitchService.getStreams()
-            val cursor = firstStreams?.pagination?.cursor
-            assert(cursor != null) {
-                "Cursor must not be null"
+            val user = twitchService.getUser()
+            assert(user != null) {
+                "User cannot not be null"
             }
-            val nextStreams = twitchService.getStreams(cursor)
-            assert(firstStreams?.data != nextStreams?.data) {
-                "Next Streams must be different"
+            assert(user!!.userName == TestData.userName) {
+                "Invalid username"
             }
         }
     }
 
     @Test
-    fun recyclerViewBottomScrollLoadsMoreStreams() {
-        // Start Activity
-        val scenario = ActivityScenario.launch(StreamsActivity::class.java)
+    fun displaysUserProfile() {
+        val scenario = ActivityScenario.launch(ProfileActivity::class.java)
 
-        var previousItemCount = 0
-        var recyclerView: RecyclerView? = null
-        // Wait to load
         Thread.sleep(TestData.networkWaitingMillis)
-        scenario.onActivity {
-            recyclerView = it.findViewById<RecyclerView>(R.id.recyclerView)
-            assert(recyclerView != null && recyclerView!!.adapter != null) {
-                "Recyclerview and Adapter cannot be null"
+        Espresso.onView(withText(TestData.userName)).check(matches(isDisplayed()))
+        Espresso.onView(withText(TestData.userDescription)).check(matches(isDisplayed()))
+
+        scenario.close()
+    }
+
+    @Test
+    fun updatesUserDescription() {
+        runBlocking {
+            val user = twitchService.updateUserDescription(TestData.updatedUserDescription)
+            assert(user!!.description == TestData.updatedUserDescription) {
+                "User description not updated"
             }
-            previousItemCount = recyclerView!!.adapter!!.itemCount
-            assert(previousItemCount > 0) {
-                "Adapter cannot be empty"
-            }
+            // Revert change
+            twitchService.updateUserDescription(TestData.userDescription)
         }
-        // Scroll to bottom
-        Espresso.onView(withId(R.id.recyclerView)).perform(
-            RecyclerViewActions
-                .scrollToPosition<RecyclerView.ViewHolder>(previousItemCount - 1)
-        )
-        // Wait to load
+    }
+
+    @Test
+    fun removesAccessTokenOnLogout() {
+        val scenario = ActivityScenario.launch(ProfileActivity::class.java)
+        // Maybe wait for user profile to load
         Thread.sleep(TestData.networkWaitingMillis)
-        // Assert more items added
-        val currentItemCount = recyclerView!!.adapter!!.itemCount
-        assert(currentItemCount > previousItemCount) {
-            "More items were not added: Previous $previousItemCount -> Current: $currentItemCount"
+
+        // Click logout
+        try {
+            Espresso.onView(withId(R.id.logoutButton)).perform(click())
+        } catch (e: NoMatchingViewException) {
+            // Maybe logout is handled automatically
+        }
+        // Wait
+        Thread.sleep(TestData.sharedPrefsWaitingMillis)
+        // Check tokens are removed
+        val sessionManager = SessionManager(ApplicationProvider.getApplicationContext())
+        assert(sessionManager.getAccessToken() == null) {
+            "Access token needs to be removed on logout"
+        }
+        assert(sessionManager.getRefreshToken() == null) {
+            "Refresh token needs to be removed on logout"
+        }
+        // Restore tokens
+        runBlocking {
+            TestData.setAccessToken(ApplicationProvider.getApplicationContext())
         }
 
-        // End Activity
         scenario.close()
     }
 

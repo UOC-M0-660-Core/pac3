@@ -1,5 +1,6 @@
 package edu.uoc.pac3.data
 
+import edu.uoc.pac3.data.oauth.OAuthConfig
 import edu.uoc.pac3.data.oauth.OAuthTokensResponse
 import edu.uoc.pac3.data.streams.StreamsResponse
 import edu.uoc.pac3.data.user.User
@@ -14,7 +15,7 @@ class TwitchApiService(private val httpClient: HttpClient) {
     private val TAG = "TwitchApiService"
 
     /// Gets Access and Refresh Tokens on Twitch
-    suspend fun getTokens(authorizationCode: String): OAuthTokensResponse? {
+    suspend fun getTokens(authorizationCode: String, config: OAuthConfig): OAuthTokensResponse? {
         // TODO("Get Tokens from Twitch")
         return null
     }

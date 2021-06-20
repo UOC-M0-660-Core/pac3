@@ -33,7 +33,7 @@ class Ex1Test {
         scenario.onActivity {
             runBlocking {
                 val apiService = TestData.provideTwitchService(it)
-                val response = apiService.getTokens("12345")
+                val response = apiService.getTokens("12345", TestData.testOAuthConfig)
                 assert(response?.accessToken == null) {
                     "Invalid code should return null access token"
                 }
