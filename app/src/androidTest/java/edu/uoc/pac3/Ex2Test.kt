@@ -15,14 +15,6 @@ import org.junit.Test
 @LargeTest
 class Ex2Test {
 
-    @After
-    fun restoreCorrectAccessToken() {
-        val context: Context = ApplicationProvider.getApplicationContext()
-        runBlocking {
-            TestData.setAccessToken(context)
-        }
-    }
-
     @Test
     fun sessionManagerSavesOAuthTokens() {
         val context: Context = ApplicationProvider.getApplicationContext()
@@ -54,5 +46,13 @@ class Ex2Test {
         // Assert tokens are cleared
         assert(sessionManager.getAccessToken() == null)
         assert(sessionManager.getRefreshToken() == null)
+    }
+
+    @After
+    fun restoreCorrectAccessToken() {
+        val context: Context = ApplicationProvider.getApplicationContext()
+        runBlocking {
+            TestData.setAccessToken(context)
+        }
     }
 }

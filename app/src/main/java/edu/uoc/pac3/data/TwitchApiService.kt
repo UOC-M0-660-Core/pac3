@@ -2,7 +2,7 @@ package edu.uoc.pac3.data
 
 import android.util.Log
 import edu.uoc.pac3.data.network.Endpoints
-import edu.uoc.pac3.data.oauth.OAuthConstants
+import edu.uoc.pac3.data.oauth.OAuthConfig
 import edu.uoc.pac3.data.oauth.OAuthTokensResponse
 import edu.uoc.pac3.data.oauth.UnauthorizedException
 import edu.uoc.pac3.data.streams.StreamsResponse
@@ -20,16 +20,16 @@ class TwitchApiService(private val httpClient: HttpClient) {
     private val TAG = "TwitchApiService"
 
     /// Gets Access and Refresh Tokens on Twitch
-    suspend fun getTokens(authorizationCode: String): OAuthTokensResponse? {
+    suspend fun getTokens(authorizationCode: String, config: OAuthConfig): OAuthTokensResponse? {
         // Get Tokens from Twitch
         try {
             val response = httpClient
                 .post<OAuthTokensResponse>(Endpoints.tokenUrl) {
-                    parameter("client_id", OAuthConstants.clientID)
-                    parameter("client_secret", OAuthConstants.clientSecret)
+                    parameter("client_id", config.getClientId())
+                    parameter("client_secret", config.getClientSecret())
                     parameter("code", authorizationCode)
                     parameter("grant_type", "authorization_code")
-                    parameter("redirect_uri", OAuthConstants.redirectUri)
+                    parameter("redirect_uri", "http://localhost")
                 }
 
             return response

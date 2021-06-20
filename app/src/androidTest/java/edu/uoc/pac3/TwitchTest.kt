@@ -1,6 +1,7 @@
 package edu.uoc.pac3
 
 import androidx.test.core.app.ApplicationProvider
+import edu.uoc.pac3.data.oauth.OAuthConfigProvider
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 
@@ -19,5 +20,10 @@ abstract class TwitchTest {
         runBlocking {
             TestData.setAccessToken(ApplicationProvider.getApplicationContext())
         }
+    }
+
+    @Before
+    fun setTestOAuthConfig() {
+        OAuthConfigProvider.config = TestData.testOAuthConfig
     }
 }

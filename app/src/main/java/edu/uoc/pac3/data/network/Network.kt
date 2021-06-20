@@ -3,8 +3,8 @@ package edu.uoc.pac3.data.network
 import android.content.Context
 import android.util.Log
 import edu.uoc.pac3.data.oauth.OAuthTokensResponse
-import edu.uoc.pac3.data.oauth.OAuthConstants
 import edu.uoc.pac3.data.SessionManager
+import edu.uoc.pac3.data.oauth.OAuthConfig
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.features.*
@@ -21,7 +21,7 @@ object Network {
 
     private const val TAG = "Network"
 
-    fun createHttpClient(context: Context): HttpClient {
+    fun createHttpClient(context: Context, config: OAuthConfig): HttpClient {
         return HttpClient(OkHttp) {
             // Json
             install(JsonFeature) {
@@ -50,7 +50,7 @@ object Network {
 
                 // Twitch Client ID Header
                 if (!headers.contains("client-id"))
-                    header("client-id", OAuthConstants.clientID)
+                    header("client-id", config.getClientId())
             }
 
             // Add OAuth Feature
@@ -64,7 +64,7 @@ object Network {
                     // Remove expired access token
                     SessionManager(context).clearAccessToken()
                     // Launch token refresh request
-                    launchTokenRefresh(context)
+                    launchTokenRefresh(context, config)
                 }
             }
         }
@@ -76,16 +76,16 @@ object Network {
         encodeDefaults = false
     }
 
-    private suspend fun launchTokenRefresh(context: Context) {
+    private suspend fun launchTokenRefresh(context: Context, config: OAuthConfig) {
         val sessionManager = SessionManager(context)
         // Get Refresh Token
         sessionManager.getRefreshToken()?.let { refreshToken ->
             try {
                 // Launch Refresh Request
                 val response =
-                    createHttpClient(context).post<OAuthTokensResponse>(Endpoints.tokenUrl) {
-                        parameter("client_id", OAuthConstants.clientID)
-                        parameter("client_secret", OAuthConstants.clientSecret)
+                    createHttpClient(context, config).post<OAuthTokensResponse>(Endpoints.tokenUrl) {
+                        parameter("client_id", config.getClientId())
+                        parameter("client_secret", config.getClientSecret())
                         parameter("refresh_token", refreshToken)
                         parameter("grant_type", "refresh_token")
                     }

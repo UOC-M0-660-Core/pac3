@@ -1,12 +1,15 @@
 package edu.uoc.pac3.data
 
 import android.content.Context
+import android.util.Log
 
 /**
  * Created by alex on 06/09/2020.
  */
 
 class SessionManager(context: Context) {
+    
+    private val TAG = "SessionManager"
 
     private val sharedPreferencesName = "sessionPreferences"
     private val sharedPreferences =

@@ -17,11 +17,17 @@ import edu.uoc.pac3.data.SessionManager
 import edu.uoc.pac3.data.TwitchApiService
 import edu.uoc.pac3.data.network.Endpoints
 import edu.uoc.pac3.data.network.Network
-import edu.uoc.pac3.data.oauth.OAuthConstants
+import edu.uoc.pac3.data.oauth.OAuthConfigProvider
 import kotlinx.android.synthetic.main.activity_oauth.*
 import kotlinx.coroutines.launch
+import java.util.*
 
 class OAuthActivity : AppCompatActivity() {
+
+    private val redirectUri = "http://localhost"
+    private val scopes = listOf("user:read:email user:edit")
+    private val uniqueState = UUID.randomUUID().toString()
+    private val oauthConfig = OAuthConfigProvider.config
 
     private val TAG = "StreamsActivity"
 
@@ -34,11 +40,11 @@ class OAuthActivity : AppCompatActivity() {
     fun buildOAuthUri(): Uri {
         return Uri.parse(Endpoints.authorizationUrl)
             .buildUpon()
-            .appendQueryParameter("client_id", OAuthConstants.clientID)
-            .appendQueryParameter("redirect_uri", OAuthConstants.redirectUri)
+            .appendQueryParameter("client_id", oauthConfig.getClientId())
+            .appendQueryParameter("redirect_uri", redirectUri)
             .appendQueryParameter("response_type", "code")
-            .appendQueryParameter("scope", OAuthConstants.scopes.joinToString(separator = " "))
-            .appendQueryParameter("state", OAuthConstants.uniqueState)
+            .appendQueryParameter("scope", scopes.joinToString(separator = " "))
+            .appendQueryParameter("state", uniqueState)
             .build()
     }
 
@@ -54,10 +60,10 @@ class OAuthActivity : AppCompatActivity() {
             ): Boolean {
                 request?.let {
                     // Check if this url is our OAuth redirect, otherwise ignore it
-                    if (request.url.toString().startsWith(OAuthConstants.redirectUri)) {
+                    if (request.url.toString().startsWith(redirectUri)) {
                         // To prevent CSRF attacks, check that we got the same state value we sent, otherwise ignore it
                         val responseState = request.url.getQueryParameter("state")
-                        if (responseState == OAuthConstants.uniqueState) {
+                        if (responseState == uniqueState) {
                             // This is our request, obtain the code!
                             request.url.getQueryParameter("code")?.let { code ->
                                 // Got it!
@@ -93,13 +99,13 @@ class OAuthActivity : AppCompatActivity() {
         progressBar.visibility = View.VISIBLE
 
         // Create Twitch Service
-        val service = TwitchApiService(Network.createHttpClient(this@OAuthActivity))
+        val service = TwitchApiService(Network.createHttpClient(this@OAuthActivity, OAuthConfigProvider.config))
         // Launch new thread attached to this Activity.
         // If the Activity is closed, this Thread will be cancelled
         lifecycleScope.launch {
 
             // Launch get Tokens Request
-            service.getTokens(authorizationCode)?.let { response ->
+            service.getTokens(authorizationCode, oauthConfig)?.let { response ->
                 // Success :)
 
                 Log.d(TAG, "Got Access token ${response.accessToken}")

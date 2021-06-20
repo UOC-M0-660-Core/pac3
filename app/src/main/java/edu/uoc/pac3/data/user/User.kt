@@ -7,6 +7,11 @@ import kotlinx.serialization.Serializable
  * Created by alex on 07/09/2020.
  */
 
+// Fill with missing parameters
+// Serialize from JSON
+// Important, remember that variables in Kotlin are camelCase!!
+// https://kotlinlang.org/docs/coding-conventions.html#naming-rules
+// Use the appropriate Serialization annotation to convert snake_case from the JSON to camelCase in Kotlin.
 
 @Serializable
 data class User(

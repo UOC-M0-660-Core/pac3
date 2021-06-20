@@ -8,6 +8,12 @@ import kotlinx.serialization.Serializable
  */
 
 @Serializable
+// Fill with missing parameters
+// Serialize from JSON
+// Important, remember that variables in Kotlin are camelCase!!
+// https://kotlinlang.org/docs/coding-conventions.html#naming-rules
+// Use the appropriate Serialization annotation to convert snake_case from the JSON to camelCase in Kotlin.
+
 data class Stream(
     @SerialName("id") val id: String,
     @SerialName("user_id") val userId: String? = null,
